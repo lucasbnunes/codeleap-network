@@ -9,7 +9,7 @@ interface Inputs {
 }
 
 export default function Home() {
-  const { register, handleSubmit, watch } = useForm<Inputs>();
+  const { register, handleSubmit, watch, formState: { isSubmitted } } = useForm<Inputs>();
   const router = useRouter()
   const dispatch = useAppDispatch()
 
@@ -30,7 +30,7 @@ export default function Home() {
           <TextInput label="Please enter your username" my="xl" placeholder="John Doe" {...register('username', { required: true })} />
 
           <Flex justify="flex-end">
-            <Button type="submit" disabled={!watch('username')} ml='auto'>ENTER</Button>
+            <Button type="submit" disabled={!watch('username')} ml='auto' loading={isSubmitted}>ENTER</Button>
           </Flex>
         </form>
       </Container>
