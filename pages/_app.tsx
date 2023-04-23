@@ -1,10 +1,10 @@
 import { Provider } from 'react-redux'
 import type { AppProps } from 'next/app'
-import { store } from '@/redux/store'
 import { MantineProvider } from '@mantine/core'
 import { theme } from '@/styles/theme'
 import { NextPage } from 'next'
 import { Layout } from '@/components/Layout'
+import { setupStore } from '@/redux/store'
 
 export type NextPageWithAccess<P = {}, IP = P> = NextPage<P, IP> & {
   isPublic?: boolean,
@@ -13,6 +13,8 @@ export type NextPageWithAccess<P = {}, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithAccess
 }
+
+const store = setupStore()
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
