@@ -14,8 +14,18 @@ export const apiSlice = createApi({
   tagTypes: ['Posts'],
   endpoints: (builder) => ({
     getPosts: builder.query<PostsQueryResult, string>({
-      query: () => '/careers/',
+      query: (query) => `/careers/${query}`,
       providesTags: ['Posts'],
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newItems) => {
+        currentCache.next = newItems.next;
+        currentCache.results.push(...newItems.results);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
     }),
     createPost: builder.mutation<
       Post,

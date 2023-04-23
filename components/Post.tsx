@@ -1,18 +1,19 @@
-import { useState } from 'react'
-import { Post } from '@/types/post';
+import { forwardRef, useState } from 'react'
+import { Post as PostType } from '@/types/post';
 import { Icon } from '@iconify/react';
-import { Box, Flex, Title, ActionIcon, Text, Button } from '@mantine/core';
+import { Box, Flex, Title, ActionIcon, Text, Button, BoxProps } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { PostActions } from './PostActions';
 
 interface PostProps {
-  post: Post;
+  post: PostType;
 }
+type Ref = HTMLElement;
 
 const CONTENT_MAX_LENGTH = 260;
 
-export function Post({ post }: PostProps) {
+export const Post = forwardRef<Ref, PostProps>(function Post({ post }, ref) {
   const { username: currentUserUsername } = useAppSelector((state) => state.user)
 
   const [expanded, { toggle }] = useDisclosure(false);
@@ -30,6 +31,7 @@ export function Post({ post }: PostProps) {
       sx={(theme) => ({
         borderRadius: theme.radius.lg
       })}
+      ref={ref}
     >
       <Flex bg='brand' c='white' p='xl' justify='space-between' sx={{ borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit' }}>
         <Title order={3}>{post.title}</Title>
@@ -65,4 +67,4 @@ export function Post({ post }: PostProps) {
       </Box>
     </Box>
   )
-}
+})
