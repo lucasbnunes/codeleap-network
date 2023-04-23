@@ -66,6 +66,7 @@ export const theme: MantineThemeOverride = {
         sx: {
           '& input': {
             borderColor: theme.colors.customGray[3],
+            borderRadius: theme.radius.md,
             '&::placeholder': {
               color: theme.colors.customGray[1],
             },
@@ -84,6 +85,27 @@ export const theme: MantineThemeOverride = {
           },
         },
       },
+    },
+    Textarea: {
+      defaultProps: (theme) => ({
+        sx: {
+          '& textarea': {
+            borderColor: theme.colors.customGray[3],
+            borderRadius: theme.radius.md,
+            '&::placeholder': {
+              color: theme.colors.customGray[1],
+            },
+          },
+        },
+        labelProps: {
+          sx: {
+            fontWeight: 400,
+            color: '#000000',
+            marginBottom: 8,
+            fontSize: '1rem',
+          },
+        },
+      }),
     },
     Button: {
       defaultProps: {

@@ -17,6 +17,7 @@ export default function Feed() {
           }
         })}
       >
+        <NewPostForm />
         <PostsList />
       </Box>
     </Container>
