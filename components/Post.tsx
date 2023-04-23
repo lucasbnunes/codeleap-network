@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { Box, Flex, Title, ActionIcon, Text, Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useAppSelector } from '@/hooks/useAppSelector';
+import { PostActions } from './PostActions';
 
 interface PostProps {
   post: Post;
@@ -21,7 +22,6 @@ export function Post({ post }: PostProps) {
   const isAuthor = post.username === currentUserUsername
 
   const date = new Date(post.created_datetime)
-  console.log(date)
   const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 
   return (
@@ -33,10 +33,7 @@ export function Post({ post }: PostProps) {
     >
       <Flex bg='brand' c='white' p='xl' justify='space-between' sx={{ borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit' }}>
         <Title order={3}>{post.title}</Title>
-        {isAuthor && <Flex gap='xl'>
-          <ActionIcon variant='transparent'><Icon icon='ic:baseline-delete-forever' color='white' fontSize='2rem' /></ActionIcon>
-          <ActionIcon variant='transparent'><Icon icon='bx:bx-edit' color='white' fontSize='2rem' /></ActionIcon>
-        </Flex>
+        {isAuthor && <PostActions post={post} />
         }
 
       </Flex>
