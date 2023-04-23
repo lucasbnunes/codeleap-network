@@ -5,6 +5,7 @@ import { Box, Flex, Title, ActionIcon, Text, Button, BoxProps } from '@mantine/c
 import { useDisclosure } from '@mantine/hooks';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { PostActions } from './PostActions';
+import { useRelativeTimeFormat } from '@/hooks/useRelativeTimeFormat';
 
 interface PostProps {
   post: PostType;
@@ -22,8 +23,7 @@ export const Post = forwardRef<Ref, PostProps>(function Post({ post }, ref) {
 
   const isAuthor = post.username === currentUserUsername
 
-  const date = new Date(post.created_datetime)
-  const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  const createDate = useRelativeTimeFormat(new Date(post.created_datetime))
 
   return (
     <Box
@@ -35,9 +35,7 @@ export const Post = forwardRef<Ref, PostProps>(function Post({ post }, ref) {
     >
       <Flex bg='brand' c='white' p='xl' justify='space-between' sx={{ borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit' }}>
         <Title order={3}>{post.title}</Title>
-        {isAuthor && <PostActions post={post} />
-        }
-
+        {isAuthor && <PostActions post={post} />}
       </Flex>
 
       <Box
@@ -56,7 +54,7 @@ export const Post = forwardRef<Ref, PostProps>(function Post({ post }, ref) {
 
         <Flex justify='space-between' mb='md'>
           <Title order={4} color='customGray.3' size={18}>@{post.username}</Title>
-          <Text color='customGray.3' size={18}>{formattedDate}</Text>
+          <Text color='customGray.3' size={18}>{createDate}</Text>
         </Flex>
 
         <Box mih={85}>
