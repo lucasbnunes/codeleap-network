@@ -1,4 +1,5 @@
 import { useAppDispatch } from "@/hooks/useAppDispatch"
+import { useAuth } from "@/hooks/useAuth"
 import { setUsername } from '@/redux/slices/userSlice'
 import { Button, Container, Flex, TextInput, Title } from '@mantine/core'
 import { useRouter } from "next/router"
@@ -12,9 +13,11 @@ export default function Home() {
   const { register, handleSubmit, watch, formState: { isSubmitted } } = useForm<Inputs>();
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const { storeSession } = useAuth()
 
   function onSubmit(data: Inputs): void {
     dispatch(setUsername(data.username))
+    storeSession(data.username)
     router.push("/feed")
   }
 
