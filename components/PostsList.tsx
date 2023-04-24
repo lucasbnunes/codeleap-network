@@ -1,31 +1,29 @@
 import { useGetPostsQuery } from "@/redux/slices/apiSlice";
-import { Box, Loader, Text } from "@mantine/core";
+import { Box, Flex, Loader, Pagination, Text } from "@mantine/core";
 import { Post } from "./Post";
 import { useEffect, useRef, useState } from "react";
-import { useIntersection } from "@mantine/hooks";
+
+const POSTS_PER_PAGE = 10
 
 export function PostsList() {
-  const { ref, entry } = useIntersection({
-    threshold: 1,
-  });
-  const [nextPage, setNextPage] = useState<string | null>()
-  const { data, isLoading } = useGetPostsQuery(nextPage || '')
-
-  useEffect(() => {
-    if (entry?.isIntersecting && !isLoading) {
-      const urlParams = data?.next?.slice(data.next.indexOf('?'))
-      setNextPage((prev) => urlParams || prev)
-    }
-  }, [entry])
+  const [page, setPage] = useState<number>(0)
+  const { data, isLoading } = useGetPostsQuery({ limit: POSTS_PER_PAGE, offset: page * POSTS_PER_PAGE })
+  const totalPages = data?.count ? Math.ceil(data.count / POSTS_PER_PAGE) : 0
 
   return (
     <Box py="xl" sx={{ '& > article + article': { marginTop: 24 } }}>
-      {data?.results.map((post, index) => <Post key={post.id} post={post} ref={index === data?.results.length - 1 ? ref : null} />)}
+      {data?.results.map((post, index) => <Post key={post.id} post={post} />)}
       {isLoading && <Loader display="block" my="xl" mx="auto" />}
       {data?.results.length === 0 &&
         <Box my="xl">
           <Text ta="center" color="customGray.3">No posts yet. Why not be the first to share something today?</Text>
         </Box>
+      }
+
+      {!isLoading && Boolean(data?.results?.length) &&
+        <Flex mt="xl" justify="center" >
+          <Pagination value={page + 1} onChange={(newPage) => setPage(newPage - 1)} total={totalPages} radius="md" />
+        </Flex>
       }
     </Box>
   )
